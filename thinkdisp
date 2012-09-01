@@ -150,19 +150,25 @@ class ThinkDisp:
         dialog.vbox.pack_start(combo)
         combo.show()
 
-        label3 = gtk.Label("My external monitor is to the ________ "
-                                                    "of the thinkpad display")
+        label3 = gtk.Label("My external monitor is ________ "
+                                                    "the thinkpad display")
         dialog.vbox.pack_start(label3)
         label3.show()
 
         #SIDE combobox
         sidecombo = gtk.combo_box_new_text()
-        sidecombo.append_text("left")
-        sidecombo.append_text("right")
-        if self.SETTINGS["SIDE"]=="left":
+        sidecombo.append_text("left-of")
+        sidecombo.append_text("right-of")
+        sidecombo.append_text("above")
+        sidecombo.append_text("below")
+        if self.SETTINGS["SIDE"]=="left-of":
             sidecombo.set_active(0)
-        else:
+        elif self.SETTINGS["SIDE"]=="right-of":
             sidecombo.set_active(1)
+        elif self.SETTINGS["SIDE"]=="above":
+            sidecombo.set_active(2)
+        else:
+            sidecombo.set_active(3)
 
         dialog.vbox.pack_start(sidecombo)
         sidecombo.show()
@@ -204,8 +210,8 @@ class ThinkDisp:
         #terminal output
         print("External Monitor Resolution set to: " + 
                                                     self.SETTINGS["RESOLUTION"])
-        print("External Monitor is to the " + self.SETTINGS["SIDE"] + 
-                                                    " of the thinkpad display")
+        print("External Monitor is " + self.SETTINGS["SIDE"] + 
+                                                    " the thinkpad display")
     
     def about_popup(self, widget):
         self.about()
@@ -231,7 +237,7 @@ class ThinkDisp:
         subprocess.Popen(["xrandr", "--output", "LVDS1", "--auto", "--output", 
                          "VIRTUAL", "--mode", str(self.SETTINGS["RESOLUTION"]),
                          "--rotate", str(self.SETTINGS["ROTATION"]), 
-                               "--"+str(self.SETTINGS["SIDE"])+"-of", "LVDS1"])
+                               "--"+str(self.SETTINGS["SIDE"]), "LVDS1"])
 		#YOU MUST HAVE screenclone in /usr/bin/
         time.sleep(1)
         subprocess.Popen(["screenclone", "-d", ":8", "-x", "1"])
